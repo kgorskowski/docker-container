@@ -1,0 +1,12 @@
+mysql:
+   image: kgorskowski/crashplan
+   container_name: crashplan
+   hostname: batcave_crashplan
+   restart: always
+   volumes:
+     - /etc/localtime:/etc/localtime:ro
+     - /etc/crashplan/:/config/
+     - /tank:/data:ro
+   ports:
+     - "4242:4242"
+     - "4243:4243"
