@@ -1,0 +1,17 @@
+[Unit]
+Description=systemd_mon
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+RestartSec=60
+EnvironmentFile=/etc/environment
+ExecStartPre=-/usr/bin/docker kill systemd_mon
+ExecStartPre-=/usr/bin/docker rm -f systemd_mon
+ExecStartPre-=/usr/bin/docker pull kgorskowski/systemd_mon
+ExecStart=/usr/bin/docker run --name systemd_mon -h ${COREOS_PUBLIC_IPV4} -v /var/run/dbus:/var/run/dbus -v /etc/systemd_mon/systemd_mon.yml:/systemd_mon/systemd_mon.yml kgorskowski/systemd_mon
+ExecStop=/usr/bin/docker stop systemd_mon
+ExecPostStop-=/usr/bin/docker rm -f systemd_mon
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,4 @@
+Dockerfile based on latest Alpine Linux for watching systemd services on dbus.
+configuration yaml file and dbus must be mounted for this to work. 
+location of configuration is as of now hardcoded to "/systemd_mon/systemd_mon.yml", can be changed as you like
+see unit file example for working systemd unit configuration

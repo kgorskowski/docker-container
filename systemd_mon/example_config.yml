@@ -1,0 +1,9 @@
+---
+verbose: true # Default is off
+notifiers:
+  slack:
+    webhook_url: https://hooks.slack.com/services/$SLACKTOKEN
+    channel: #Chanel
+    icon_emoji: ":ghost"
+units:
+ - super-duper.service
