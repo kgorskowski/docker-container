@@ -1,0 +1,14 @@
+[Unit]
+Description="copy automatic snapshots from FFM to Ireland Region as offsite backup"
+Requires=docker.service
+After=docker.service
+
+[Service]
+KillMode=none
+ExecStartPre=-/usr/bin/docker copy-rds-snapshots
+ExecStartPre=-/usr/bin/docker rm -f  copy-rds-snapshots
+ExecStartPre=/usr/bin/docker pull kgorskowski/copy-rds-snapshots
+ExecStart=/usr/bin/bash -c "docker run --name copy-rds-snapshots -e AWS_ACCESS_KEY_ID=`etcdctl get AWS_ACCESS_KEY_ID` -e AWS_SECRET_ACCESS_KEY=`etcdctl get AWS_SECRET_ACCESS_KEY` -e source_arn=`etcdctl get source_arn` kgorskowski/rds-snapshot-backup"
+ExecStop=/usr/bin/docker rm -f copy-rds-snapshots
+[Install]
+WantedBy=multi-user.target
