@@ -10,6 +10,5 @@ find "$CURRENTDIR" -name '*.pdf' ! -name '*_OCR.pdf' -type f -print0 | while rea
     READLINK=$(readlink -f "$file")
     DIR=$(dirname "$READLINK")
     echo "found PDF file $FILENAME in $DIR"
-    echo "debug readlink="$READLINK" , dir="$DIR", file=$FILENAME, destination=$SHORT"
     docker run --rm -e LANG=de_DE.UTF-8 -e LANGUAGE=de_DE:de -e LC_ALL=de_DE.UTF-8 -v "$DIR"/:/home/docker/ kgorskowski/ocr OCRmyPDF $2 -c -d -o 300  -l $LANG "$FILENAME"  "${SHORT}"_OCR.pdf 2>&1
 done;
