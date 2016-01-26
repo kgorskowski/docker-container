@@ -1,0 +1,13 @@
+#!/bin/bash
+LANG=deu
+echo Recursively scanning directory "$1" 
+CURRENTDIR="$1"
+find "$CURRENTDIR" -name '*.pdf' ! -name '*_OCR.pdf' -type f -print0 | while read -d '' -r file;do
+    LONGFILE=$file
+    SEDVAL=$(echo $CURRENTDIR | sed s/'\/'/'\\\/'/g)
+    FILENAME=$(basename "$LONGFILE")
+    SHORT=$(echo "${FILENAME%.*}")
+    DIR=$(dirname $(readlink -f $file))
+    echo "found PDF file $FILENAME in $DIR"
+    docker run --rm -e LANG=de_DE.UTF-8 -e LANGUAGE=de_DE:de -e LC_ALL=de_DE.UTF-8 -v "$DIR"/:/home/docker/ kgorskowski/ocr OCRmyPDF $2 -c -d -o 300  -l $LANG "$FILENAME"  "${SHORT}"_OCR.pdf 2>&1
+done;
